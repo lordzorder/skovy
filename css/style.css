@@ -679,43 +679,34 @@ h1 {
     var(--paper);
 }
 
+.testimonials-slider-wrapper,
 .reviews-carousel {
   position: relative;
+  --testimonial-arrow-offset: 180px;
+  width: min(100%, var(--container));
+  margin-inline: auto;
 }
 
 .reviews-track {
-  display: grid;
-  grid-auto-columns: minmax(310px, 31.5%);
-  grid-auto-flow: column;
-  gap: 24px;
-  align-items: stretch;
-  overflow-x: auto;
-  padding: 8px 4px 28px;
-  scroll-behavior: smooth;
-  scroll-snap-type: x mandatory;
-  scrollbar-width: none;
-}
-
-.reviews-track::-webkit-scrollbar {
-  display: none;
+  display: block;
+  width: min(100%, 760px);
+  margin-inline: auto;
 }
 
 .review-card {
-  display: grid;
-  grid-template-rows: auto minmax(0, 1fr) auto;
-  height: 390px;
-  padding: 30px;
+  width: 100%;
+  min-height: 320px;
+  padding: 42px 48px;
   border: 1px solid rgba(127, 53, 20, 0.14);
   border-radius: 8px;
   background:
     linear-gradient(145deg, rgba(255, 250, 240, 0.94), rgba(250, 229, 196, 0.9)),
     var(--white);
   box-shadow: 0 18px 46px rgba(72, 36, 16, 0.16);
-  scroll-snap-align: start;
 }
 
 .review-card-top {
-  min-height: 48px;
+  min-height: 0;
 }
 
 .review-mark {
@@ -735,26 +726,10 @@ h1 {
 
 .review-copy {
   position: relative;
-  min-height: 0;
-  margin-top: 12px;
-  overflow: auto;
+  margin-top: 18px;
   color: var(--brown);
-  scrollbar-width: thin;
-  scrollbar-color: rgba(216, 92, 18, 0.42) transparent;
-}
-
-.review-copy.is-collapsed {
-  max-height: 148px;
-  overflow: hidden;
-}
-
-.review-copy.is-collapsed::after {
-  position: absolute;
-  inset: auto 0 0;
-  height: 52px;
-  content: "";
-  background: linear-gradient(180deg, rgba(255, 250, 240, 0), rgba(255, 250, 240, 0.98));
-  pointer-events: none;
+  font-size: 18px;
+  line-height: 1.82;
 }
 
 .review-copy p {
@@ -766,6 +741,7 @@ h1 {
 }
 
 .review-translation {
+  margin-top: 16px;
   color: var(--brown-soft);
   font-style: italic;
 }
@@ -775,7 +751,9 @@ h1 {
   align-items: center;
   justify-content: space-between;
   gap: 18px;
-  margin-top: 22px;
+  margin-top: 28px;
+  padding-top: 20px;
+  border-top: 1px solid rgba(127, 53, 20, 0.12);
 }
 
 .review-footer strong {
@@ -783,30 +761,17 @@ h1 {
   font-size: 16px;
 }
 
-.review-toggle {
-  min-height: 38px;
-  padding: 0 14px;
-  border: 1px solid rgba(216, 92, 18, 0.34);
-  border-radius: 8px;
-  color: var(--orange-dark);
-  background: rgba(255, 244, 223, 0.72);
+.review-counter {
+  color: var(--orange);
   font-size: 12px;
   font-weight: 850;
   text-transform: uppercase;
-  transition:
-    background 160ms ease,
-    color 160ms ease;
 }
 
-.review-toggle:hover,
-.review-toggle:focus-visible {
-  color: var(--white);
-  background: var(--orange);
-}
-
+.testimonial-arrow,
 .reviews-arrow {
   position: absolute;
-  top: 50%;
+  top: var(--testimonial-arrow-offset);
   z-index: 4;
   display: grid;
   place-items: center;
@@ -818,17 +783,21 @@ h1 {
   background: rgba(127, 53, 20, 0.84);
   box-shadow: 0 16px 32px rgba(72, 36, 16, 0.24);
   font-size: 38px;
-  transform: translateY(-58%);
+  transform: translateY(-50%);
 }
 
+.testimonial-arrow-left,
 .reviews-arrow-left {
-  left: -24px;
+  left: 0;
 }
 
+.testimonial-arrow-right,
 .reviews-arrow-right {
-  right: -24px;
+  right: 0;
 }
 
+.testimonial-arrow:hover,
+.testimonial-arrow:focus-visible,
 .reviews-arrow:hover,
 .reviews-arrow:focus-visible {
   background: var(--orange);
@@ -1067,9 +1036,6 @@ h1 {
     transform: translateX(50%);
   }
 
-  .reviews-track {
-    grid-auto-columns: minmax(300px, 46%);
-  }
 }
 
 @media (max-width: 720px) {
@@ -1158,14 +1124,23 @@ h1 {
     grid-auto-columns: 82%;
   }
 
+  .testimonials-slider-wrapper,
+  .reviews-carousel {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0 10px;
+    width: 100%;
+  }
+
   .reviews-track {
-    grid-auto-columns: 86%;
-    gap: 16px;
+    flex: 0 0 100%;
+    order: 1;
+    width: 100%;
   }
 
   .review-card {
-    height: 420px;
-    padding: 24px;
+    padding: 30px 24px;
   }
 
   .review-footer {
@@ -1173,17 +1148,25 @@ h1 {
     flex-direction: column;
   }
 
+  .testimonial-arrow,
   .reviews-arrow {
+    position: static;
+    order: 2;
+    display: inline-grid;
     width: 42px;
     height: 52px;
+    margin-top: 18px;
+    transform: none;
   }
 
+  .testimonial-arrow-left,
   .reviews-arrow-left {
-    left: -10px;
+    margin-left: 0;
   }
 
+  .testimonial-arrow-right,
   .reviews-arrow-right {
-    right: -10px;
+    margin-left: 0;
   }
 
   .gallery-arrow {

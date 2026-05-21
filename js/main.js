@@ -91,10 +91,12 @@ document.addEventListener("keydown", (event) => {
 // Reviews can later point to a public Google Apps Script JSON endpoint.
 // Prefer Google Sheets + Apps Script over direct Google Drive fetches to avoid CORS and permission issues.
 const REVIEWS_URL = "/data/reviews.json";
-const REVIEW_COLLAPSE_LIMIT = 260;
 const reviewsContainer = document.querySelector("[data-reviews]");
 const reviewsPrev = document.querySelector("[data-reviews-prev]");
 const reviewsNext = document.querySelector("[data-reviews-next]");
+const LOCAL_REVIEWS_FALLBACK = Array.isArray(window.LOCAL_REVIEWS) ? window.LOCAL_REVIEWS : [];
+let loadedReviews = [];
+let currentReviewIndex = 0;
 
 function escapeHtml(value) {
   return String(value)
@@ -120,61 +122,56 @@ function normalizeReviews(payload) {
     .filter((item) => item.text);
 }
 
-function renderReviews(reviews) {
-  if (!reviews.length) {
+function renderReviewParagraphs(value) {
+  return String(value)
+    .split(/\n{2,}/)
+    .map((paragraph) => paragraph.trim())
+    .filter(Boolean)
+    .map((paragraph) => `<p>${escapeHtml(paragraph).replace(/\n/g, "<br>")}</p>`)
+    .join("");
+}
+
+function renderCurrentReview() {
+  if (!loadedReviews.length) {
     reviewsContainer.innerHTML = '<p class="loading-text">Jelenleg nincs megjeleníthető vélemény.</p>';
     return;
   }
 
-  reviewsContainer.innerHTML = reviews
-    .map((item, index) => {
-      const isLong = item.text.length + item.translation.length > REVIEW_COLLAPSE_LIMIT;
-      const meta = [item.source, item.intro].filter(Boolean).join(" · ");
-      return `
-        <article class="review-card${isLong ? " is-collapsible" : ""}" data-review-card>
-          <div class="review-card-top">
-            <span class="review-mark" aria-hidden="true">“</span>
-            ${meta ? `<p class="review-meta">${escapeHtml(meta)}</p>` : ""}
-          </div>
-          <div class="review-copy${isLong ? " is-collapsed" : ""}" id="review-copy-${index}" data-review-copy>
-            <p>${escapeHtml(item.text)}</p>
-            ${item.translation ? `<p class="review-translation">${escapeHtml(item.translation)}</p>` : ""}
-          </div>
-          <div class="review-footer">
-            <strong>${escapeHtml(item.name)}</strong>
-            ${
-              isLong
-                ? `<button class="review-toggle" type="button" aria-expanded="false" aria-controls="review-copy-${index}" data-review-toggle>Tovább olvasom</button>`
-                : ""
-            }
-          </div>
-        </article>
-      `;
-    })
-    .join("");
+  const item = loadedReviews[currentReviewIndex];
+  const meta = [item.source, item.intro].filter(Boolean).join(" · ");
+
+  reviewsContainer.innerHTML = `
+    <article class="review-card" data-review-card>
+      <div class="review-card-top">
+        <span class="review-mark" aria-hidden="true">“</span>
+        ${meta ? `<p class="review-meta">${escapeHtml(meta)}</p>` : ""}
+      </div>
+      <div class="review-copy" data-review-copy>
+        ${renderReviewParagraphs(item.text)}
+        ${item.translation ? `<div class="review-translation">${renderReviewParagraphs(item.translation)}</div>` : ""}
+      </div>
+      <div class="review-footer">
+        <strong>${escapeHtml(item.name)}</strong>
+        <span class="review-counter">${currentReviewIndex + 1} / ${loadedReviews.length}</span>
+      </div>
+    </article>
+  `;
 }
 
-reviewsPrev.addEventListener("click", () => {
-  reviewsContainer.scrollBy({ left: -reviewsContainer.clientWidth * 0.86, behavior: "smooth" });
-});
+function renderReviews(reviews) {
+  loadedReviews = reviews;
+  currentReviewIndex = 0;
+  renderCurrentReview();
+}
 
-reviewsNext.addEventListener("click", () => {
-  reviewsContainer.scrollBy({ left: reviewsContainer.clientWidth * 0.86, behavior: "smooth" });
-});
+function moveReview(direction) {
+  if (!loadedReviews.length) return;
+  currentReviewIndex = (currentReviewIndex + direction + loadedReviews.length) % loadedReviews.length;
+  renderCurrentReview();
+}
 
-reviewsContainer.addEventListener("click", (event) => {
-  const toggle = event.target.closest("[data-review-toggle]");
-  if (!toggle) return;
-
-  const card = toggle.closest("[data-review-card]");
-  const copy = card.querySelector("[data-review-copy]");
-  const isExpanded = toggle.getAttribute("aria-expanded") === "true";
-
-  toggle.setAttribute("aria-expanded", String(!isExpanded));
-  toggle.textContent = isExpanded ? "Tovább olvasom" : "Bezárás";
-  copy.classList.toggle("is-collapsed", isExpanded);
-  card.classList.toggle("is-expanded", !isExpanded);
-});
+reviewsPrev.addEventListener("click", () => moveReview(-1));
+reviewsNext.addEventListener("click", () => moveReview(1));
 
 fetch(`${REVIEWS_URL}${REVIEWS_URL.includes("?") ? "&" : "?"}updated=${Date.now()}`, { cache: "no-store" })
   .then((response) => {
@@ -183,6 +180,12 @@ fetch(`${REVIEWS_URL}${REVIEWS_URL.includes("?") ? "&" : "?"}updated=${Date.now(
   })
   .then((payload) => renderReviews(normalizeReviews(payload)))
   .catch(() => {
+    const fallbackReviews = normalizeReviews(LOCAL_REVIEWS_FALLBACK);
+    if (fallbackReviews.length) {
+      renderReviews(fallbackReviews);
+      return;
+    }
+
     reviewsContainer.innerHTML =
       '<p class="loading-text">A vélemények jelenleg nem tölthetők be. Helyi fájlból futtatva indíts szervert, külső forrásnál pedig Google Sheets + Apps Script JSON endpointot használj.</p>';
   });
