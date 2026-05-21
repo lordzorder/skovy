@@ -1,0 +1,29 @@
+---
+name: Kata
+text: Rendszeresen járok Gáborhoz, és minden alkalommal érezhető a különbség. A hát- és nyakfájdalmam szinte teljesen megszűnt.
+rating: 5
+---
+
+---
+name: Ádám
+text: A japán masszázs nála valóban különleges élmény. Testileg és lelkileg is feltölt, csak ajánlani tudom.
+rating: 5
+---
+
+---
+name: Eszter
+text: Nagyon profi, figyelmes és empatikus. Mindig rám szabja a kezelést, és érzem a hosszú évek tapasztalatát.
+rating: 5
+---
+
+---
+name: Gergő
+text: Sok ülőmunka után mentem hozzá váll- és derékfájdalommal. Már az első alkalom után könnyebben mozogtam.
+rating: 5
+---
+
+---
+name: Nóra
+text: Nyugodt környezet, precíz kezelés és valódi odafigyelés. Minden alkalom után sokkal lazábbnak érzem magam.
+rating: 5
+---
