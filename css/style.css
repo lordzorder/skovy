@@ -819,30 +819,29 @@ h1 {
 }
 
 .contact-layout {
-  display: grid;
-  grid-template-columns: 0.82fr 1fr;
-  gap: 56px;
-  align-items: start;
+  display: block;
 }
 
 .contact-copy h2,
-.contact-copy p,
-.contact-copy .eyebrow {
+.contact-copy p {
   color: var(--white);
 }
 
-.contact-copy .eyebrow {
-  color: #ffd092;
+.contact-copy {
+  max-width: 680px;
+  margin-inline: auto;
+  text-align: center;
 }
 
 .contact-copy p {
-  max-width: 520px;
-  margin: 20px 0 30px;
+  max-width: 600px;
+  margin: 20px auto 30px;
 }
 
 .contact-list {
   display: grid;
   gap: 12px;
+  justify-items: center;
   font-style: normal;
 }
 
@@ -856,60 +855,6 @@ h1 {
   align-items: center;
   width: fit-content;
   border-bottom: 1px solid rgba(255, 250, 240, 0.36);
-}
-
-.contact-form {
-  display: grid;
-  gap: 18px;
-  padding: 34px;
-  border: 1px solid rgba(255, 244, 223, 0.2);
-  border-radius: 8px;
-  background: rgba(255, 244, 223, 0.13);
-  box-shadow: 0 26px 80px rgba(43, 22, 11, 0.24);
-  backdrop-filter: blur(12px);
-}
-
-.form-row {
-  display: grid;
-  gap: 8px;
-}
-
-.form-row label {
-  font-size: 13px;
-  font-weight: 850;
-  text-transform: uppercase;
-}
-
-.form-row input,
-.form-row textarea {
-  width: 100%;
-  border: 1px solid rgba(255, 244, 223, 0.34);
-  border-radius: 8px;
-  color: var(--white);
-  background: rgba(42, 24, 14, 0.25);
-  outline: none;
-  transition:
-    border-color 160ms ease,
-    box-shadow 160ms ease,
-    background 160ms ease;
-}
-
-.form-row input {
-  min-height: 50px;
-  padding: 0 15px;
-}
-
-.form-row textarea {
-  resize: vertical;
-  min-height: 138px;
-  padding: 14px 15px;
-}
-
-.form-row input:focus,
-.form-row textarea:focus {
-  border-color: #ffd092;
-  background: rgba(42, 24, 14, 0.34);
-  box-shadow: 0 0 0 4px rgba(255, 208, 146, 0.12);
 }
 
 .site-footer {
@@ -1011,8 +956,7 @@ h1 {
   }
 
   .service-grid,
-  .about-layout,
-  .contact-layout {
+  .about-layout {
     grid-template-columns: 1fr;
   }
 
@@ -1111,8 +1055,7 @@ h1 {
     height: auto;
   }
 
-  .service-card-body,
-  .contact-form {
+  .service-card-body {
     padding: 24px;
   }
 

@@ -189,23 +189,3 @@ fetch(`${REVIEWS_URL}${REVIEWS_URL.includes("?") ? "&" : "?"}updated=${Date.now(
     reviewsContainer.innerHTML =
       '<p class="loading-text">A vélemények jelenleg nem tölthetők be. Helyi fájlból futtatva indíts szervert, külső forrásnál pedig Google Sheets + Apps Script JSON endpointot használj.</p>';
   });
-
-// Contact form opens the visitor's default email client with a prefilled message.
-const mailForm = document.querySelector("[data-mail-form]");
-
-mailForm.addEventListener("submit", (event) => {
-  event.preventDefault();
-
-  const data = new FormData(mailForm);
-  const name = data.get("name")?.toString().trim() || "";
-  const email = data.get("email")?.toString().trim() || "";
-  const phone = data.get("phone")?.toString().trim() || "";
-  const message = data.get("message")?.toString().trim() || "";
-
-  const subject = encodeURIComponent(`Masszázs időpontfoglalás - ${name}`);
-  const body = encodeURIComponent(
-    [`Név: ${name}`, `Email: ${email}`, `Telefonszám: ${phone}`, "", "Üzenet:", message].join("\n"),
-  );
-
-  window.location.href = `mailto:skovy.massage@gmail.com?subject=${subject}&body=${body}`;
-});
