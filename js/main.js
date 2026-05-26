@@ -90,7 +90,7 @@ document.addEventListener("keydown", (event) => {
 
 // Reviews can later point to a public Google Apps Script JSON endpoint.
 // Prefer Google Sheets + Apps Script over direct Google Drive fetches to avoid CORS and permission issues.
-const REVIEWS_URL = "/data/reviews.json";
+const REVIEWS_URL = "data/reviews.json";
 const reviewsContainer = document.querySelector("[data-reviews]");
 const reviewsPrev = document.querySelector("[data-reviews-prev]");
 const reviewsNext = document.querySelector("[data-reviews-next]");
