@@ -230,11 +230,6 @@ button {
   filter: saturate(1.08);
 }
 
-.button-large {
-  min-height: 54px;
-  padding-inline: 28px;
-}
-
 .button-soft {
   color: var(--orange-dark);
   background: var(--cream);
@@ -312,31 +307,6 @@ h1 {
   max-width: 540px;
   margin: 0;
   font-size: 17px;
-}
-
-.hero-actions {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 20px;
-  margin-top: 34px;
-}
-
-.text-link {
-  position: relative;
-  font-size: 14px;
-  font-weight: 850;
-  text-transform: uppercase;
-}
-
-.text-link::after {
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: -5px;
-  height: 2px;
-  content: "";
-  background: currentColor;
 }
 
 .section {
@@ -1017,12 +987,6 @@ h1 {
 
   .hero-lead {
     font-size: 16px;
-  }
-
-  .hero-actions {
-    align-items: stretch;
-    flex-direction: column;
-    width: min(100%, 320px);
   }
 
   .section,
